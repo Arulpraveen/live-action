@@ -16,6 +16,20 @@ const lottieContainer = ref(null);
 let animation = null;
 let scrollTrigger = null;
 
+// Simple debounce function implementation
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+
 onMounted(() => {
   // Detect if device is mobile
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -26,7 +40,7 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      path: '/danceHover7.json',
+      path: 'https://cdn.lottielab.com/l/5HyqmxAjSQqmfq.json',
     });
 
     animation.addEventListener('DOMLoaded', () => {
@@ -38,96 +52,58 @@ onMounted(() => {
         trigger: lottieContainer.value,
         start: "center center",
         end: "200% bottom",
-        scrub: isMobile ? 0.5 : true, // Smaller scrub value for mobile
+        scrub: isMobile ? 0.5 : true,
         markers: true,
         onUpdate: (self) => {
-          // Ensure smooth frame updates
           requestAnimationFrame(() => {
             const frame = Math.round(self.progress * (animation.totalFrames - 1));
             animation.goToAndStop(frame, true);
           });
-        },
-        onRefresh: () => {
-          animation.goToAndStop(0, true);
-        },
-        // Mobile-specific settings
-        fastScrollEnd: true,        // Better performance for fast scrolling
-        preventOverlaps: true,      // Prevent multiple triggers
-        invalidateOnRefresh: true,  // Recalculate on resize/orientation change
+        }
       });
-
-      // Add touch event handling for mobile
-      if (isMobile) {
-        let touchStart = 0;
-        let currentFrame = 0;
-
-        lottieContainer.value.addEventListener('touchstart', (e) => {
-          touchStart = e.touches[0].clientY;
-          currentFrame = animation.currentFrame;
-        }, { passive: true });
-
-        lottieContainer.value.addEventListener('touchmove', (e) => {
-          const touchDelta = touchStart - e.touches[0].clientY;
-          const frameDelta = (touchDelta / window.innerHeight) * animation.totalFrames;
-          const newFrame = Math.max(0, Math.min(animation.totalFrames - 1, 
-            currentFrame + frameDelta));
-          
-          requestAnimationFrame(() => {
-            animation.goToAndStop(newFrame, true);
-          });
-        }, { passive: true });
-      }
-
-      // Click functionality
-      const clickableElement = lottieContainer.value.querySelector('.balls-id');
-      if (clickableElement) {
-        clickableElement.style.cursor = 'pointer';
-        clickableElement.addEventListener('click', () => {
-          window.open('https://www.samuelday.de/', '_blank');
-        });
-      }
     });
   };
 
+
   initializeAnimation();
 
-  // Optimized resize handler
-  const handleResize = gsap.debounce(() => {
-    ScrollTrigger.refresh(true); // Force refresh
-  }, isMobile ? 500 : 250); // Longer debounce on mobile
+// Optimized resize handler using our debounce function
+const handleResize = debounce(() => {
+  ScrollTrigger.refresh(true); // Force refresh
+}, isMobile ? 500 : 250);
 
-  window.addEventListener('resize', handleResize);
-  // Listen for orientation changes on mobile
-  if (isMobile) {
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => {
-        ScrollTrigger.refresh(true);
-      }, 200);
-    });
-  }
+window.addEventListener('resize', handleResize);
 
-  onBeforeUnmount(() => {
-    if (scrollTrigger) {
-      scrollTrigger.kill();
-    }
-    if (animation) {
-      animation.destroy();
-    }
-    window.removeEventListener('resize', handleResize);
-    if (isMobile) {
-      window.removeEventListener('orientationchange', handleResize);
-    }
+// Handle orientation changes
+if (isMobile) {
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => {
+      ScrollTrigger.refresh(true);
+    }, 200);
   });
+}
+
+onBeforeUnmount(() => {
+  if (scrollTrigger) {
+    scrollTrigger.kill();
+  }
+  if (animation) {
+    animation.destroy();
+  }
+  window.removeEventListener('resize', handleResize);
+  if (isMobile) {
+    window.removeEventListener('orientationchange', handleResize);
+  }
+});
 });
 </script>
 
-<style>
-/* Your existing styles remain the same */
-<style scoped>
+
+<style >
 .container {
   width: 100vw;
   /* Full width of the viewport */
-  height: 200vh;
+  height: 14.28vw;
   /* width/7 to keep the scroll timing intact. */
   /* max-height: 300vh;         Limit to full viewport height */
   display: flex;
