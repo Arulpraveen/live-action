@@ -17,7 +17,9 @@ let animation = null;
 let scrollTrigger = null;
 
 onMounted(() => {
-  // Wait for both DOM and Lottie animation to be ready
+  // Detect if device is mobile
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
   const initializeAnimation = () => {
     animation = lottie.loadAnimation({
       container: lottieContainer.value,
@@ -27,31 +29,56 @@ onMounted(() => {
       path: '/danceHover7.json',
     });
 
-    // Wait for animation to be loaded before setting up ScrollTrigger
     animation.addEventListener('DOMLoaded', () => {
-      // Clear existing ScrollTrigger if it exists
       if (scrollTrigger) {
         scrollTrigger.kill();
       }
 
-      // Set up new ScrollTrigger
       scrollTrigger = ScrollTrigger.create({
         trigger: lottieContainer.value,
         start: "center center",
         end: "200% bottom",
-        scrub: true,
+        scrub: isMobile ? 0.5 : true, // Smaller scrub value for mobile
         markers: true,
         onUpdate: (self) => {
-          const frame = Math.round(self.progress * (animation.totalFrames - 1));
-          animation.goToAndStop(frame, true);
+          // Ensure smooth frame updates
+          requestAnimationFrame(() => {
+            const frame = Math.round(self.progress * (animation.totalFrames - 1));
+            animation.goToAndStop(frame, true);
+          });
         },
         onRefresh: () => {
-          // Ensure animation is at correct frame after refresh
           animation.goToAndStop(0, true);
-        }
+        },
+        // Mobile-specific settings
+        fastScrollEnd: true,        // Better performance for fast scrolling
+        preventOverlaps: true,      // Prevent multiple triggers
+        invalidateOnRefresh: true,  // Recalculate on resize/orientation change
       });
 
-      // Add click functionality
+      // Add touch event handling for mobile
+      if (isMobile) {
+        let touchStart = 0;
+        let currentFrame = 0;
+
+        lottieContainer.value.addEventListener('touchstart', (e) => {
+          touchStart = e.touches[0].clientY;
+          currentFrame = animation.currentFrame;
+        }, { passive: true });
+
+        lottieContainer.value.addEventListener('touchmove', (e) => {
+          const touchDelta = touchStart - e.touches[0].clientY;
+          const frameDelta = (touchDelta / window.innerHeight) * animation.totalFrames;
+          const newFrame = Math.max(0, Math.min(animation.totalFrames - 1, 
+            currentFrame + frameDelta));
+          
+          requestAnimationFrame(() => {
+            animation.goToAndStop(newFrame, true);
+          });
+        }, { passive: true });
+      }
+
+      // Click functionality
       const clickableElement = lottieContainer.value.querySelector('.balls-id');
       if (clickableElement) {
         clickableElement.style.cursor = 'pointer';
@@ -62,18 +89,23 @@ onMounted(() => {
     });
   };
 
-  // Initialize animation
   initializeAnimation();
 
-  // Handle window resize
+  // Optimized resize handler
   const handleResize = gsap.debounce(() => {
-    // Refresh ScrollTrigger on resize
-    ScrollTrigger.refresh();
-  }, 250);
+    ScrollTrigger.refresh(true); // Force refresh
+  }, isMobile ? 500 : 250); // Longer debounce on mobile
 
   window.addEventListener('resize', handleResize);
+  // Listen for orientation changes on mobile
+  if (isMobile) {
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        ScrollTrigger.refresh(true);
+      }, 200);
+    });
+  }
 
-  // Cleanup function
   onBeforeUnmount(() => {
     if (scrollTrigger) {
       scrollTrigger.kill();
@@ -82,6 +114,9 @@ onMounted(() => {
       animation.destroy();
     }
     window.removeEventListener('resize', handleResize);
+    if (isMobile) {
+      window.removeEventListener('orientationchange', handleResize);
+    }
   });
 });
 </script>
