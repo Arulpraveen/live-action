@@ -40,7 +40,7 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      path: 'https://cdn.lottielab.com/l/5HyqmxAjSQqmfq.json',
+      path: '/danceHover7.json',
     });
 
     animation.addEventListener('DOMLoaded', () => {
