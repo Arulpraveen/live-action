@@ -1,26 +1,35 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  <!-- <ScrollTr /> -->
+  <SamScroll />
+  <!-- <interactable-matter></interactable-matter> -->
+   <!-- <SvgAnimator></SvgAnimator> -->
+    <!-- <multi-svg-animator></multi-svg-animator> -->
+     <!-- <working-svg-animator></working-svg-animator> -->
+      <!-- <HomeUI></HomeUI> -->
+       <!-- <mobile-multi-svg-animator></mobile-multi-svg-animator> -->
+   
+ </template>
+ 
+ <script setup>
+ import SamScroll from './components/SamScroll.vue';
+ // import TeaserPage from './components/TeaserPage.vue';
+ // import InteractableMatter from './components/InteractableMatter.vue';
+ // import ScrollTr from './components/ScrollTr.vue';
+ // import HiComp from './components/HiComp.vue';
+ // import SvgAnimator from './components/SvgAnimator.vue';
+ // import MultiSvgAnimator from './components/MultiSvgAnimator.vue';
+ // import MobileMultiSvgAnimator from './components/MobileMultiSvgAnimator.vue';
+ // import HomeUI from './components/HomeUI.vue';
+ 
+ // import WorkingSvgAnimator from './components/WorkingSvgAnimator.vue';
+ </script>
+ 
+ <style scoped>
+ 
+ html{
+     margin: 0;
+   }
+ 
+ 
+ </style>
+ 
