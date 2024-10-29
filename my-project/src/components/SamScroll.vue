@@ -40,7 +40,8 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      path: '/compressedmax.json',
+      path: '/dataOpt.json',
+      // path: 'https://cdn.lottielab.com/l/7VSH2aF7dMx6n7.json',
     });
 
     animation.addEventListener('DOMLoaded', () => {
@@ -51,7 +52,7 @@ onMounted(() => {
       scrollTrigger = ScrollTrigger.create({
         trigger: lottieContainer.value,
         start: "center center",
-        end: "800% bottom",
+        end: "200% bottom",
         scrub: isMobile ? 0.5 : true,
         markers: true,
         onUpdate: (self) => {
@@ -79,7 +80,7 @@ if (isMobile) {
   window.addEventListener('orientationchange', () => {
     setTimeout(() => {
       ScrollTrigger.refresh(true);
-    }, 200);
+    }, 10);
   });
 }
 
@@ -179,13 +180,17 @@ onBeforeUnmount(() => {
 
 }
 
+html{
+  scroll-behavior: smooth;
+}
+/* 
 .text-precomp {
 
 animation: float 3s ease-in-out infinite !important;
 display: inline-block !important;
 opacity: 0.5;
 
-}
+} */
 
 .smartframe {
     position: relative; /* Ensure positioned elements are relative to this container */
