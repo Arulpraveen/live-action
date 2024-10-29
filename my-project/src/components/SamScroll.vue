@@ -40,7 +40,7 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      path: '/danceHover7.json',
+      path: '/compressedmax.json',
     });
 
     animation.addEventListener('DOMLoaded', () => {
@@ -51,7 +51,7 @@ onMounted(() => {
       scrollTrigger = ScrollTrigger.create({
         trigger: lottieContainer.value,
         start: "center center",
-        end: "200% bottom",
+        end: "800% bottom",
         scrub: isMobile ? 0.5 : true,
         markers: true,
         onUpdate: (self) => {
