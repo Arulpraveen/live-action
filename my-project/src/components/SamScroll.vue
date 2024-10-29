@@ -9,7 +9,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import lottie from 'lottie-web';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-
+  
 gsap.registerPlugin(ScrollTrigger);
 
 const lottieContainer = ref(null);
@@ -40,9 +40,14 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      path: '/data.json',
+<<<<<<< HEAD
+      path: '/finalJson.json',
+    })
+=======
+      path: '/dataOpt.json',
       // path: 'https://cdn.lottielab.com/l/7VSH2aF7dMx6n7.json',
     });
+>>>>>>> parent of 9129533 (Merge pull request #3 from Arulpraveen/safe)
 
     animation.addEventListener('DOMLoaded', () => {
       if (scrollTrigger) {
@@ -52,7 +57,7 @@ onMounted(() => {
       scrollTrigger = ScrollTrigger.create({
         trigger: lottieContainer.value,
         start: "center center",
-        end: "200% bottom",
+        end: "600% bottom",
         scrub: isMobile ? 0.5 : true,
         markers: true,
         onUpdate: (self) => {
@@ -188,9 +193,7 @@ html{
 
 animation: float 3s ease-in-out infinite !important;
 display: inline-block !important;
-opacity: 0.5;
-
-} */
+/* opacity: 0.5; */
 
 .smartframe {
     position: relative; /* Ensure positioned elements are relative to this container */
