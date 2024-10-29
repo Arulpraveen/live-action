@@ -40,14 +40,8 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-<<<<<<< HEAD
       path: '/finalJson.json',
-    })
-=======
-      path: '/dataOpt.json',
-      // path: 'https://cdn.lottielab.com/l/7VSH2aF7dMx6n7.json',
     });
->>>>>>> parent of 9129533 (Merge pull request #3 from Arulpraveen/safe)
 
     animation.addEventListener('DOMLoaded', () => {
       if (scrollTrigger) {
