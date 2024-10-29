@@ -40,7 +40,7 @@ onMounted(() => {
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      path: '/dataOpt.json',
+      path: '/data.json',
       // path: 'https://cdn.lottielab.com/l/7VSH2aF7dMx6n7.json',
     });
 
