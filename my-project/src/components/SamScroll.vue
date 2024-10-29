@@ -79,7 +79,7 @@ if (isMobile) {
   window.addEventListener('orientationchange', () => {
     setTimeout(() => {
       ScrollTrigger.refresh(true);
-    }, 200);
+    }, 10);
   });
 }
 
